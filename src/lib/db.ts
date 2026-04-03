@@ -1,0 +1,10 @@
+import { createClient } from '@supabase/supabase-js'
+
+// Server-side Supabase client for API routes.
+// Uses the service role key for admin operations if available,
+// otherwise falls back to the publishable/anon key.
+// Note: Table creation and schema changes must be done via SQL in the Supabase dashboard.
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+
+export const db = createClient(supabaseUrl, supabaseServiceKey)

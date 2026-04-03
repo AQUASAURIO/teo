@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  name      String
+  image     String?
+  playlists Playlist[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Artist {
+  id        String   @id @default(cuid())
+  name      String
+  image     String
+  bio       String?
+  songs     Song[]
+  albums    Album[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Album {
+  id        String   @id @default(cuid())
+  title     String
+  cover     String
+  year      Int?
+  artistId  String
+  artist    Artist   @relation(fields: [artistId], references: [id])
+  songs     Song[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Song {
+  id        String        @id @default(cuid())
+  title     String
+  duration  Int
+  cover     String
+  audioUrl  String
+  artistId  String
+  artist    Artist        @relation(fields: [artistId], references: [id])
+  albumId   String?
+  album     Album?        @relation(fields: [albumId], references: [id])
+  playlists PlaylistSong[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model Playlist {
+  id          String        @id @default(cuid())
+  name        String
+  description String?
+  cover       String?
+  isPublic    Boolean       @default(true)
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  songs       PlaylistSong[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model PlaylistSong {
+  id         String   @id @default(cuid())
+  playlistId String
+  playlist   Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  songId     String
+  song       Song     @relation(fields: [songId], references: [id], onDelete: Cascade)
+  order      Int      @default(0)
+  addedAt    DateTime @default(now())
+
+  @@unique([playlistId, songId])
+}
