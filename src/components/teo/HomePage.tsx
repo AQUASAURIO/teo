@@ -6,9 +6,10 @@ import { PlaylistCard } from "./PlaylistCard";
 import { ArtistCard } from "./ArtistCard";
 import { AlbumCard } from "./AlbumCard";
 import { MiniSongCard } from "./MiniSongCard";
-import { Play } from "lucide-react";
+import { Play, ChevronLeft, User } from "lucide-react";
 import { usePlayerStore, type Song } from "@/store/player-store";
 import { useViewStore } from "@/store/view-store";
+import { SongTable } from "./SongTable";
 
 interface HomeData {
   playlists: Array<{ id: string; title: string; description: string | null; coverImage: string | null; songs: unknown[] }>;
@@ -133,5 +134,3 @@ export function HomePage() {
   );
 }
 
-import { ChevronLeft, User } from "lucide-react";
-import { SongTable } from "./SongTable";
