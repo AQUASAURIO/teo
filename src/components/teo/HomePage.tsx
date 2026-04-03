@@ -19,117 +19,119 @@ interface HomeData {
 
 export function HomePage() {
   const [data, setData] = useState<HomeData | null>(null);
-  const [greeting, setGreeting] = useState("");
   const { playSong } = usePlayerStore();
+  const { setView } = useViewStore();
 
   useEffect(() => {
     fetch("/api/home")
       .then((r) => r.json())
       .then(setData)
       .catch(() => { });
-
-    const hour = new Date().getHours();
-    if (hour < 12) setGreeting("Good morning");
-    else if (hour < 18) setGreeting("Good afternoon");
-    else setGreeting("Good evening");
   }, []);
 
   if (!data) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="flex items-center gap-3 text-[#B3B3B3]">
-          <div className="w-5 h-5 border-2 border-[#B3B3B3] border-t-transparent rounded-full animate-spin" />
-          Loading...
+      <div className="flex items-center justify-center h-[50vh]">
+        <div className="flex items-center gap-3 text-white/50">
+          <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          <span>Syncing with your vibes...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div>
-      {/* Greeting */}
-      <h1 className="text-3xl font-bold text-white mb-6 h-9">{greeting}</h1>
-
-      {/* Quick Play Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
-        {data.playlists.slice(0, 6).map((pl) => (
-          <button
-            key={pl.id}
-            className="flex items-center bg-white/10 hover:bg-white/20 rounded-md overflow-hidden group transition-colors"
-            onClick={() => {
-              const queue = data.trendingSongs;
-              if (queue.length > 0) playSong(queue[0], queue);
-            }}
-          >
-            {pl.coverImage ? (
-              <img src={pl.coverImage} alt={pl.title} className="w-16 h-16 object-cover" />
-            ) : (
-              <div className="w-16 h-16 bg-[#1DB954] flex items-center justify-center">
-                <Play className="w-6 h-6 text-black" fill="black" />
-              </div>
-            )}
-            <span className="text-white font-semibold text-sm px-4 truncate flex-1 text-left">
-              {pl.title}
-            </span>
-            <div className="w-10 h-10 bg-[#1DB954] rounded-full flex items-center justify-center mr-3 opacity-0 group-hover:opacity-100 transition-all shadow-lg shadow-black/30">
-              <Play className="w-4 h-4 text-black ml-0.5" fill="black" />
-            </div>
-          </button>
-        ))}
+    <div className="space-y-12 py-6">
+      {/* Search Header (Small) */}
+      <div className="flex items-center gap-4 text-white/40 mb-8">
+        <div className="flex items-center gap-2 cursor-pointer hover:text-white transition-colors">
+          <ChevronLeft className="w-5 h-5" />
+        </div>
+        <div className="flex items-center gap-2 cursor-pointer hover:text-white transition-colors rotate-180">
+          <ChevronLeft className="w-5 h-5" />
+        </div>
+        <span className="text-sm font-medium ml-4">What's hot</span>
       </div>
 
-      {/* Featured Playlists */}
-      <ContentRow title="Featured Playlists">
-        {data.playlists.map((pl) => (
-          <div key={pl.id} className="w-[180px] flex-shrink-0">
-            <PlaylistCard
-              id={pl.id}
-              name={pl.title}
-              description={pl.description}
-              cover={pl.coverImage}
-              songCount={pl.songs?.length}
-            />
-          </div>
-        ))}
-      </ContentRow>
+      {/* Trending Banner */}
+      <section className="relative w-full aspect-[21/9] rounded-[2rem] overflow-hidden group">
+        <div className="absolute inset-0 trending-banner transition-transform duration-700 group-hover:scale-105" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
-      {/* Trending Songs */}
-      <ContentRow title="Trending Now">
-        {data.trendingSongs.map((song) => (
-          <div key={song.id} className="w-[280px] flex-shrink-0">
-            <MiniSongCard song={song} queue={data.trendingSongs} />
+        <div className="relative h-full flex flex-col justify-end p-10 md:p-14 space-y-4">
+          <div className="flex items-center gap-2">
+            <span className="text-white/60 text-xs font-bold uppercase tracking-widest font-mono">Artist</span>
           </div>
-        ))}
-      </ContentRow>
+          <h2 className="text-4xl md:text-6xl font-black text-white max-w-lg leading-[1.1]">
+            Top all over the world
+          </h2>
+          <div className="flex items-center gap-6 text-white/80 text-sm mb-4">
+            <div className="flex items-center gap-2">
+              <User className="w-4 h-4" />
+              <span className="font-semibold">Montly listener</span>
+            </div>
+            <span className="font-bold">• 98.029</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => {
+                const song = data.trendingSongs[0];
+                if (song) playSong(song, data.trendingSongs);
+              }}
+              className="flex items-center gap-2 px-8 py-3 bg-primary hover:bg-primary/90 text-white rounded-full font-bold transition-all transform hover:scale-105 shadow-lg shadow-primary/20"
+            >
+              <Play className="w-4 h-4 fill-white" />
+              Play Now
+            </button>
+            <button className="px-8 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white rounded-full font-bold transition-all border border-white/10">
+              Follow
+            </button>
+          </div>
+        </div>
+      </section>
 
-      {/* New Releases */}
-      <ContentRow title="New Releases">
-        {data.newReleases.map((album) => (
-          <div key={album.id} className="w-[180px] flex-shrink-0">
-            <AlbumCard
-              id={album.id}
-              title={album.title}
-              cover={album.cover}
-              artistName={album.artist.name}
-              year={album.year}
-            />
-          </div>
-        ))}
-      </ContentRow>
+      {/* Playlist Section */}
+      <section>
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-4xl font-bold text-white tracking-tight">Playlist</h3>
+          <button className="text-white/40 text-sm font-medium hover:text-white transition-colors">Show all</button>
+        </div>
+        <div className="glass rounded-[2rem] overflow-hidden p-6 border border-white/5">
+          <SongTable songs={data.trendingSongs.slice(0, 4)} queue={data.trendingSongs} />
+        </div>
+      </section>
 
-      {/* Popular Artists */}
-      <ContentRow title="Popular Artists">
-        {data.popularArtists.map((artist) => (
-          <div key={artist.id} className="w-[180px] flex-shrink-0">
-            <ArtistCard
-              id={artist.id}
-              name={artist.name}
-              image={artist.image}
-              songCount={artist._count?.songs}
-            />
-          </div>
-        ))}
-      </ContentRow>
+      {/* Browsing Collections */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <ContentRow title="Discover New" orientation="vertical">
+          {data.newReleases.slice(0, 3).map((album) => (
+            <div key={album.id} className="w-full">
+              <ArtistCard
+                id={album.id}
+                name={album.title}
+                image={album.cover}
+                songCount={1} // Placeholder
+              />
+            </div>
+          ))}
+        </ContentRow>
+
+        <ContentRow title="Your Library" orientation="vertical">
+          {data.playlists.slice(0, 3).map((pl) => (
+            <div key={pl.id} className="w-full">
+              <PlaylistCard
+                id={pl.id}
+                name={pl.title}
+                description={pl.description}
+                cover={pl.coverImage}
+              />
+            </div>
+          ))}
+        </ContentRow>
+      </div>
     </div>
   );
 }
+
+import { ChevronLeft, User } from "lucide-react";
+import { SongTable } from "./SongTable";

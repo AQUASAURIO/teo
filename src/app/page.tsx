@@ -117,24 +117,28 @@ export default function TeoApp() {
   }, []);
 
   return (
-    <div className="flex flex-col h-screen bg-[#121212] overflow-hidden">
-      <div className="flex flex-1 gap-2 p-2 overflow-hidden">
+    <div className="flex flex-col h-screen bg-[#06060a] overflow-hidden text-white">
+      <div className="flex flex-1 overflow-hidden relative">
         {/* Sidebar */}
-        <div className="flex-shrink-0 h-full rounded-lg overflow-hidden bg-black">
+        <div className="flex-shrink-0 h-full w-[260px] glass-sidebar z-10">
           <Sidebar onCreatePlaylist={handleCreatePlaylist} />
         </div>
 
         {/* Main Content */}
-        <main className="flex-1 bg-[#121212] rounded-lg overflow-hidden flex flex-col">
-          <TopBar />
-          <div className="flex-1 overflow-y-auto px-6 pb-6">
-            <MainContent />
+        <main className="flex-1 overflow-hidden flex flex-col relative">
+          <div className="absolute inset-0 overflow-y-auto">
+            <TopBar />
+            <div className="px-8 pb-32">
+              <MainContent />
+            </div>
           </div>
         </main>
       </div>
 
-      {/* Now Playing Bar */}
-      <NowPlayingBar />
+      {/* Now Playing Bar - Integrated at bottom but with glass effect */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[95%] max-w-[1200px] z-50">
+        <NowPlayingBar />
+      </div>
     </div>
   );
 }

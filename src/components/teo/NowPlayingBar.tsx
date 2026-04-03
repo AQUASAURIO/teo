@@ -124,10 +124,10 @@ export function NowPlayingBar() {
   const progressPercent = duration > 0 ? (progress / duration) * 100 : 0;
 
   return (
-    <footer className="h-[90px] bg-[#181818] border-t border-white/5 flex items-center px-4 gap-4">
+    <footer className="h-[100px] glass rounded-[2.5rem] flex items-center px-8 gap-8 border border-white/10 shadow-2xl">
       {/* Left: Song Info */}
-      <div className="flex items-center gap-3 w-[280px] min-w-[200px]">
-        <div className="w-14 h-14 rounded overflow-hidden flex-shrink-0 bg-white/5">
+      <div className="flex items-center gap-4 w-[300px] min-w-[240px]">
+        <div className="w-14 h-14 rounded-2xl overflow-hidden flex-shrink-0 bg-white/5 border border-white/5 shadow-lg">
           <Image
             src={currentSong.cover}
             alt={currentSong.title}
@@ -139,7 +139,7 @@ export function NowPlayingBar() {
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
             <button
-              className="block text-white text-sm font-medium truncate hover:underline"
+              className="block text-white text-base font-bold truncate hover:underline"
               onClick={() => {
                 if (currentSong.albumId) {
                   setView("album", { id: currentSong.albumId });
@@ -149,11 +149,11 @@ export function NowPlayingBar() {
               {currentSong.title}
             </button>
             {currentSong.source === "youtube" && (
-              <Youtube className="w-3 h-3 text-[#FF0000] flex-shrink-0" />
+              <Youtube className="w-3 h-3 text-primary flex-shrink-0" />
             )}
           </div>
           <button
-            className="block text-[#B3B3B3] text-xs truncate hover:underline hover:text-white"
+            className="block text-white/40 text-xs font-medium truncate hover:underline hover:text-white"
             onClick={() => {
               setView("artist", { id: currentSong.artistId });
             }}
@@ -163,106 +163,106 @@ export function NowPlayingBar() {
         </div>
         <button
           onClick={() => setIsLiked(!isLiked)}
-          className={`flex-shrink-0 transition-colors ${isLiked ? "text-[#1DB954]" : "text-[#B3B3B3] hover:text-white"}`}
+          className={`flex-shrink-0 transition-all transform hover:scale-110 ${isLiked ? "text-primary" : "text-white/20 hover:text-white/40"}`}
         >
-          <Heart className="w-4 h-4" fill={isLiked ? "#1DB954" : "none"} />
+          <Heart className="w-5 h-5" fill={isLiked ? "currentColor" : "none"} />
         </button>
       </div>
 
-      {/* Center: Controls */}
-      <div className="flex-1 flex flex-col items-center gap-1 max-w-[722px]">
-        <div className="flex items-center gap-4">
+      {/* Center: Controls & Progress */}
+      <div className="flex-1 flex flex-col items-center gap-3">
+        {/* Playback controls */}
+        <div className="flex items-center gap-8">
           <button
             onClick={toggleShuffle}
-            className={`transition-colors ${
-              shuffle ? "text-[#1DB954]" : "text-[#B3B3B3] hover:text-white"
-            }`}
+            className={`transition-colors ${shuffle ? "text-primary" : "text-white/40 hover:text-white"
+              }`}
           >
             <Shuffle className="w-4 h-4" />
           </button>
+
           <button
             onClick={prevSong}
-            className="text-[#B3B3B3] hover:text-white transition-colors"
+            className="text-white/80 hover:text-white transition-colors"
           >
-            <SkipBack className="w-4 h-4" fill="currentColor" />
+            <SkipBack className="w-5 h-5" fill="currentColor" />
           </button>
+
           <button
             onClick={togglePlay}
-            className="w-8 h-8 bg-white rounded-full flex items-center justify-center hover:scale-105 transition-transform"
+            className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-xl shadow-white/10"
           >
             {isPlaying ? (
-              <Pause className="w-4 h-4 text-black" fill="black" />
+              <Pause className="w-5 h-5 text-black" fill="black" />
             ) : (
-              <Play className="w-4 h-4 text-black ml-0.5" fill="black" />
+              <Play className="w-5 h-5 text-black ml-1" fill="black" />
             )}
           </button>
+
           <button
             onClick={nextSong}
-            className="text-[#B3B3B3] hover:text-white transition-colors"
+            className="text-white/80 hover:text-white transition-colors"
           >
-            <SkipForward className="w-4 h-4" fill="currentColor" />
+            <SkipForward className="w-5 h-5" fill="currentColor" />
           </button>
+
           <button
             onClick={toggleRepeat}
-            className={`transition-colors relative ${
-              repeatMode !== "off" ? "text-[#1DB954]" : "text-[#B3B3B3] hover:text-white"
-            }`}
+            className={`transition-colors ${repeatMode !== "off" ? "text-primary" : "text-white/40 hover:text-white"
+              }`}
           >
             {repeatMode === "one" ? (
               <Repeat1 className="w-4 h-4" />
             ) : (
               <Repeat className="w-4 h-4" />
             )}
-            {repeatMode !== "off" && (
-              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-[#1DB954] rounded-full" />
-            )}
           </button>
         </div>
-        <div className="flex items-center gap-2 w-full">
-          <span className="text-[#B3B3B3] text-xs min-w-[40px] text-right tabular-nums">
+
+        {/* Progress bar area */}
+        <div className="flex items-center gap-3 w-full max-w-[600px]">
+          <span className="text-white/30 text-[10px] font-bold min-w-[35px] text-right tabular-nums tracking-widest">
             {formatTime(progress)}
           </span>
           <div
             ref={progressRef}
-            className="flex-1 h-1 bg-white/20 rounded-full cursor-pointer group relative"
+            className="flex-1 h-1.5 bg-white/5 rounded-full cursor-pointer group relative overflow-hidden border border-white/5"
             onClick={handleProgressClick}
             onMouseDown={handleProgressMouseDown}
           >
             <div
-              className="h-full bg-white group-hover:bg-[#1DB954] rounded-full relative transition-colors"
+              className={`h-full bg-white rounded-full relative transition-all duration-150 ${isDragging ? "" : ""}`}
               style={{ width: `${progressPercent}%` }}
-            >
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow" />
-            </div>
+            />
+            {/* Hover indicator (thumb line replacement) */}
+            <div
+              className="absolute h-full w-0.5 bg-white top-0"
+              style={{ left: `${progressPercent}%` }}
+            />
           </div>
-          <span className="text-[#B3B3B3] text-xs min-w-[40px] tabular-nums">
+          <span className="text-white/30 text-[10px] font-bold min-w-[35px] tabular-nums tracking-widest">
             {formatTime(duration)}
           </span>
         </div>
       </div>
 
-      {/* Right: Volume & Queue */}
-      <div className="flex items-center gap-2 w-[280px] min-w-[200px] justify-end">
-        <button className="text-[#B3B3B3] hover:text-white transition-colors">
-          <ListMusic className="w-4 h-4" />
-        </button>
-        <button
-          onClick={toggleMute}
-          className="text-[#B3B3B3] hover:text-white transition-colors"
-        >
-          <VolumeIcon className="w-4 h-4" />
-        </button>
-        <div
-          className="w-24 h-1 bg-white/20 rounded-full cursor-pointer group relative"
-          onClick={handleVolumeClick}
-        >
+      {/* Right: Extra Controls */}
+      <div className="flex items-center gap-6 w-[300px] min-w-[240px] justify-end">
+        <div className="flex items-center gap-3 group">
+          <VolumeIcon className="w-4 h-4 text-white/40 group-hover:text-white transition-colors cursor-pointer" onClick={toggleMute} />
           <div
-            className="h-full bg-white group-hover:bg-[#1DB954] rounded-full relative transition-colors"
-            style={{ width: `${volume * 100}%` }}
+            className="w-24 h-1 bg-white/10 rounded-full cursor-pointer group/vol relative border border-white/5"
+            onClick={handleVolumeClick}
           >
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow" />
+            <div
+              className="h-full bg-white rounded-full relative transition-all"
+              style={{ width: `${volume * 100}%` }}
+            />
           </div>
         </div>
+        <button className="text-white/40 hover:text-white transition-colors">
+          <ListMusic className="w-5 h-5" />
+        </button>
       </div>
     </footer>
   );

@@ -6,9 +6,10 @@ import { useRef, useState, useEffect } from "react";
 interface ContentRowProps {
   title: string;
   children: React.ReactNode;
+  orientation?: "horizontal" | "vertical";
 }
 
-export function ContentRow({ title, children }: ContentRowProps) {
+export function ContentRow({ title, children, orientation = "horizontal" }: ContentRowProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -44,17 +45,15 @@ export function ContentRow({ title, children }: ContentRowProps) {
         <div className="flex items-center gap-1">
           <button
             onClick={() => scroll("left")}
-            className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
-              canScrollLeft ? "bg-white/10 hover:bg-white/20 text-white" : "bg-white/5 text-transparent"
-            }`}
+            className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${canScrollLeft ? "bg-white/10 hover:bg-white/20 text-white" : "bg-white/5 text-transparent"
+              }`}
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
           <button
             onClick={() => scroll("right")}
-            className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
-              canScrollRight ? "bg-white/10 hover:bg-white/20 text-white" : "bg-white/5 text-transparent"
-            }`}
+            className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${canScrollRight ? "bg-white/10 hover:bg-white/20 text-white" : "bg-white/5 text-transparent"
+              }`}
           >
             <ChevronRight className="w-5 h-5" />
           </button>
@@ -62,7 +61,7 @@ export function ContentRow({ title, children }: ContentRowProps) {
       </div>
       <div
         ref={scrollRef}
-        className="flex gap-4 overflow-x-auto scrollbar-hide pb-2"
+        className={`flex gap-4 pb-2 ${orientation === "horizontal" ? "overflow-x-auto scrollbar-hide" : "flex-col"}`}
       >
         {children}
       </div>

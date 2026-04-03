@@ -44,49 +44,62 @@
 }
 
 :root {
-  --accent-color: #1DB954;
-  --radius: 0.625rem;
-  --background: #121212;
+  --background: #0d0d12;
   --foreground: #ffffff;
-  --card: #181818;
+  --card: rgba(255, 255, 255, 0.03);
   --card-foreground: #ffffff;
-  --popover: #282828;
+  --popover: #1a1a1a;
   --popover-foreground: #ffffff;
-  --primary: #1DB954;
+  --primary: #ff4d4d;
   --primary-foreground: #ffffff;
-  --secondary: #282828;
+  --secondary: rgba(255, 255, 255, 0.05);
   --secondary-foreground: #ffffff;
-  --muted: #282828;
-  --muted-foreground: #B3B3B3;
-  --accent: #1DB954;
+  --muted: rgba(255, 255, 255, 0.05);
+  --muted-foreground: #a0a0a0;
+  --accent: #ff4d4d;
   --accent-foreground: #ffffff;
-  --destructive: #e21c3d;
-  --border: rgba(255, 255, 255, 0.08);
-  --input: rgba(255, 255, 255, 0.1);
-  --ring: #1DB954;
-  --chart-1: #1DB954;
-  --chart-2: #1ed760;
-  --chart-3: #169c46;
-  --chart-4: #14833b;
-  --chart-5: #0d5e2a;
-  --sidebar: #000000;
-  --sidebar-foreground: #ffffff;
-  --sidebar-primary: #1DB954;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #282828;
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: rgba(255, 255, 255, 0.08);
-  --sidebar-ring: #1DB954;
+  --destructive: #ff4d4d;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.05);
+  --ring: #ff4d4d;
+  --radius: 1rem;
+  
+  /* Custom Theme Colors */
+  --sidebar: rgba(18, 18, 18, 0.8);
+  --main-bg: #12121a;
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.05);
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-[#06060a] text-foreground;
+    background-image: 
+      radial-gradient(circle at 0% 0%, rgba(80, 0, 150, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 100% 100%, rgba(255, 0, 100, 0.05) 0%, transparent 50%);
     overflow: hidden;
+    height: 100vh;
   }
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-sidebar {
+  background: rgba(10, 10, 15, 0.7);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-right: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.trending-banner {
+  background: linear-gradient(to right, rgba(0,0,0,0.8), transparent), url('/trending-bg.jpg');
+  background-size: cover;
+  background-position: center;
 }
 
 /* Custom scrollbar styles */
